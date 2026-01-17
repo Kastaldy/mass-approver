@@ -3,11 +3,6 @@ services:
     name: mass-approver
     env: python
     region: oregon
-    buildCommand: |
-      pip install --upgrade pip
-      pip install -r requirements.txt
+    plan: free
+    buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
-    pythonVersion: "3.11.9"
-    envVars:
-      - key: PYTHON_VERSION
-        value: "3.11.9"
