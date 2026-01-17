@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mass Approver</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Cabeçalho -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-chart-bar"></i>
+                <h1>Analisador de Indicadores Demográficos</h1>
+            </div>
+            <p class="subtitle">Analise múltiplos endereços de forma rápida e eficiente</p>
+        </header>
+
+        <div class="content">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="card">
+                    <h3><i class="fas fa-sliders-h"></i> Configurações</h3>
+                    
+                    <div class="config-section">
+                        <h4><i class="fas fa-ruler"></i> Réguas de Corte</h4>
+                        
+                        <div class="input-group">
+                            <label for="regua_renda">
+                                <i class="fas fa-money-bill-wave"></i> Renda Média (R$)
+                            </label>
+                            <input type="number" id="regua_renda" value="4600" min="0" step="100">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="regua_pea">
+                                <i class="fas fa-users"></i> PEA Dia
+                            </label>
+                            <input type="number" id="regua_pea" value="5000" min="0" step="100">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="regua_densidade">
+                                <i class="fas fa-city"></i> Densidade
+                            </label>
+                            <input type="number" id="regua_densidade" value="5000" min="0" step="100">
+                        </div>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h4><i class="fas fa-info-circle"></i> Como usar</h4>
+                        <ol>
+                            <li>Faça upload da planilha</li>
+                            <li>Ajuste as réguas se necessário</li>
+                            <li>Clique em "Analisar"</li>
+                            <li>Baixe os resultados em Excel</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="format-section">
+                        <h4><i class="fas fa-file-excel"></i> Formato da Planilha</h4>
+                        <p>A planilha deve ter:</p>
+                        <ul>
+                            <li><strong>Linha 1:</strong> Endereços (coluna B em diante)</li>
+                            <li><strong>Coluna A:</strong> Nomes dos indicadores</li>
+                            <li><strong>Célula A1:</strong> Vazia</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Área principal -->
+            <div class="main-content">
+                <!-- Upload -->
+                <div class="card upload-card">
+                    <h2><i class="fas fa-cloud-upload-alt"></i> Upload da Planilha</h2>
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-file-excel fa-3x"></i>
+                        <p>Arraste e solte ou <span class="browse-link">clique para selecionar</span></p>
+                        <p class="file-types">Formatos suportados: .xlsx, .xls, .csv</p>
+                        <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" hidden>
+                        <div class="selected-file" id="selectedFile"></div>
+                    </div>
+                </div>
+
+                <!-- Botão de análise -->
+                <div class="analysis-button">
+                    <button id="analyzeBtn" class="btn-primary">
+                        <i class="fas fa-play"></i> Iniciar Análise
+                    </button>
+                </div>
+
+                <!-- Resultados -->
+                <div class="card results-card" id="resultsCard" style="display: none;">
+                    <h2><i class="fas fa-chart-line"></i> Resultados da Análise</h2>
+                    
+                    <!-- Estatísticas -->
+                    <div class="stats-container" id="statsContainer"></div>
+                    
+                    <!-- Filtros -->
+                    <div class="filters">
+                        <h4>Filtrar por Status:</h4>
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" data-filter="all">Todos</button>
+                            <button class="filter-btn" data-filter="aprovado">Aprovados</button>
+                            <button class="filter-btn" data-filter="parcial">Parciais</button>
+                            <button class="filter-btn" data-filter="reprovado">Reprovados</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Tabela -->
+                    <div class="table-container">
+                        <table id="resultsTable">
+                            <thead>
+                                <tr>
+                                    <th>Endereço</th>
+                                    <th>Renda Média (R$)</th>
+                                    <th>PEA Dia</th>
+                                    <th>Densidade</th>
+                                    <th>Renda</th>
+                                    <th>PEA</th>
+                                    <th>Dens.</th>
+                                    <th>Pontos</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultsBody"></tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Botão de download -->
+                    <div class="download-section">
+                        <button id="downloadBtn" class="btn-success">
+                            <i class="fas fa-download"></i> Baixar Resultados em Excel
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mensagens de erro/sucesso -->
+                <div id="messageContainer"></div>
+
+                <!-- Loading -->
+                <div class="loading" id="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Processando arquivo...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rodapé -->
+        <footer>
+            <p>© 2026 Analisador de Indicadores Demográficos | Desenvolvido por um Curioso</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
