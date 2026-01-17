@@ -424,16 +424,14 @@ def debug():
 
 
 if __name__ == '__main__':
-    # Detecta se está em produção (Render usa variável PORT)
+    import sys
+    print(f"\n✅ Python {sys.version}")
+    
     port = int(os.environ.get("PORT", 5000))
     
     print("\n" + "=" * 60)
-    print(" Servidor Flask iniciando...")
-    print(f" Porta: {port}")
-    print(" Ambiente:", "PRODUÇÃO" if os.environ.get("PORT") else "DESENVOLVIMENTO")
+    print("🚀 Mass Approver iniciando...")
+    print(f"🔧 Porta: {port}")
     print("=" * 60 + "\n")
     
-    # Em produção, desative debug
-    debug_mode = not bool(os.environ.get("PORT"))
-    
-    app.run(debug=debug_mode, host='0.0.0.0', port=port)
+    app.run(debug=False, host='0.0.0.0', port=port)
