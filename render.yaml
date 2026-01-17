@@ -1,9 +1,13 @@
 services:
   - type: web
-    name: analisador-indicadores
+    name: mass-approver
     env: python
-    buildCommand: pip install -r requirements.txt
+    region: oregon
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
     startCommand: gunicorn app:app
+    pythonVersion: "3.11.9"
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.5
+        value: "3.11.9"
