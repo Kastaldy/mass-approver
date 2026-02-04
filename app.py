@@ -9,7 +9,6 @@ from openpyxl.styles import PatternFill, Font, Alignment
 from openpyxl.utils import get_column_letter
 from openpyxl import Workbook
 
-# === APENAS UMA INICIALIZAÇÃO DO FLASK ===
 app = Flask(__name__,
             static_folder='static',
             template_folder='templates')
@@ -435,3 +434,4 @@ if __name__ == '__main__':
     print("=" * 60 + "\n")
     
     app.run(debug=False, host='0.0.0.0', port=port)
+
